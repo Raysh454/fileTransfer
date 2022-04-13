@@ -10,6 +10,7 @@ void waitForGo(int sock) {
     char buffer[BUFSIZ];
     
     size_t bytesRcvd = recv(sock, buffer, BUFSIZ - 1, 0);
+    buffer[goStringLen] = '\0';
 
     if(bytesRcvd < 0)
         DieWithSystemMessage("waitForGo() recv() Failed");

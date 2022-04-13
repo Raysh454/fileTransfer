@@ -8,38 +8,39 @@
 #include <arpa/inet.h>
 #include "Practical.h"
 
-long recvFile(int clientSock, long fSize, FILE *fp);
+long recvFile(int clientSock, long fSize, char *fName, FILE *fp);
 long getFileData(int clientSock, char *fName, long *fSize);
 
 void HandleTCPClient(int clientSock, char *storageLocation) {
-    
+
     char fileName[256];
     long fileSize = 0;
     getFileData(clientSock, fileName, &fileSize);
-    char *filePath = strcat(storageLocation, fileName);
-    
-    if(fileSize == 0)
-        printf("Downloading file: %s\nUnable to get file size\n", fileName + 1);
-    else
-        printf("Downloading file: %s\nSize: %ld MB\n", fileName + 1, fileSize / 1024 / 1024);
-    fflush(stdout);
+    char *filePath = malloc(strlen(storageLocation) + strlen(fileName) + 1);
+    if(filePath == NULL) {
+        puts("malloc() Failed");
+        return;
+    }
+    memcpy(filePath, storageLocation, strlen(storageLocation));
+    memcpy(filePath + strlen(storageLocation), fileName, strlen(fileName) + 1);
 
     goAhead(clientSock);
 
     FILE *fp = fopen(filePath, "wb");
     if(fp == NULL)
         DieWithSystemMessage("fopen() Failed");
-
-    long totalWritten = recvFile(clientSock, fileSize, fp);
+    free(filePath);
+    long totalWritten = recvFile(clientSock, fileSize, fileName, fp);
     if(totalWritten != fileSize)
-        printf("\nUnexpected number of bytes written to file\nTerminating connection\n");
+        printf("\nUnexpected number of bytes written to file\nConnection terminated unexpectedly\n");
     else
-        printf("\nSuccessfully downloaded file\nConnection terminated unexpectedly\n");
+        printf("\nSuccessfully downloaded file\nTerminating connection\n");
+    
     fclose(fp);
     close(clientSock);
 }
 
-long recvFile(int clientSock, long fSize, FILE *fp) {
+long recvFile(int clientSock, long fSize, char *fName, FILE *fp) {
     char buffer[BUFSIZ];
     ssize_t numBytesRcvd = recv(clientSock, buffer, BUFSIZ - 1, 0);
     long totalRcvd = numBytesRcvd;
@@ -56,11 +57,7 @@ long recvFile(int clientSock, long fSize, FILE *fp) {
         if(numBytesRcvd < 0)
             DieWithSystemMessage("recv() Failed()");
         totalRcvd += numBytesRcvd;
-        if(fSize == 0)
-            printf("\rReceived: %ld MB", totalRcvd / 1024 / 1024);
-        else
-            printf("\rReceived: %ld MB, out of %ld MB", totalRcvd / 1024 / 1024, fSize / 1024 / 1024);
-        fflush(stdout);
+        printFileStatus(fName, fSize, totalRcvd);
     }
 
     return totalRcvd;
@@ -87,7 +84,7 @@ long getFileData(int clientSock, char *fName, long *fSize) {
         fName[i] = buffer[i];
         fName[i + 1] = '\0';
     }
-    
+
     if(buffer[strlen(fName) + 1] == 'U')
         return totalRcvd;
 
@@ -99,4 +96,3 @@ long getFileData(int clientSock, char *fName, long *fSize) {
 
     return totalRcvd;
 }
-
