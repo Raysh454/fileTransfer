@@ -1,7 +1,7 @@
 #include <stdio.h>
-#include "Practical.h"
+#include "Send.h"
 
-void printFileStatus(char *fName, long fSize, long bytesSent) {
+void printSFileStatus(char *fName, long fSize, long bytesSent) {
         if(fSize == -1)
             puts("Unable to get file size");
         else if(fSize < 1024)

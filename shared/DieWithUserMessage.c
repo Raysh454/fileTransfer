@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "Practical.h"
+#include "Shared.h"
 
 void DieWithUserMessage(const char *msg, const char *details) {
     fputs(msg, stderr);

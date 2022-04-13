@@ -2,15 +2,16 @@
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
-#include "Practical.h"
+#include "Receive.h"
+#include "../shared/Shared.h"
 
-int main(int argc, char *argv[]) {
+int cloudRecv(int argc, char *argv[]) {
     
-    if(argc != 3)
+    if(argc < 4)
         DieWithUserMessage("Parameters: ", "<Host> <File location>");
     
-    char *portString = argv[1];
-    char *storageLocation = argv[2];
+    char *portString = argv[2];
+    char *storageLocation = argv[3];
 
     int servSock = setupTCPServer(portString);
     if(servSock < 0)

@@ -1,6 +1,6 @@
-#include<stdio.h>
-#include<arpa/inet.h>
-#include "Practical.h"
+#include <stdio.h>
+#include <arpa/inet.h>
+#include "Shared.h"
 
 void printSocketAddress(const struct sockaddr *address, FILE *stream) {
     if(address == NULL || stream == NULL)

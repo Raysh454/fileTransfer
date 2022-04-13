@@ -2,11 +2,9 @@
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
-#include <sys/types.h>
 #include <sys/socket.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#include "Practical.h"
+#include "Receive.h"
+#include "../shared/Shared.h"
 
 long recvFile(int clientSock, long fSize, char *fName, FILE *fp);
 long getFileData(int clientSock, char *fName, long *fSize);
@@ -57,7 +55,7 @@ long recvFile(int clientSock, long fSize, char *fName, FILE *fp) {
         if(numBytesRcvd < 0)
             DieWithSystemMessage("recv() Failed()");
         totalRcvd += numBytesRcvd;
-        printFileStatus(fName, fSize, totalRcvd);
+        printRFileStatus(fName, fSize, totalRcvd);
     }
 
     return totalRcvd;

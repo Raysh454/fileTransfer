@@ -1,8 +1,9 @@
-#include<stdio.h>
-#include<stdlib.h>
-#include<netdb.h>
-#include<sys/socket.h>
-#include "Practical.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <netdb.h>
+#include <sys/socket.h>
+#include "Receive.h"
+#include "../shared/Shared.h"
 
 int AcceptTCPConnection(int servSock) {
     struct sockaddr_storage clntAddr;

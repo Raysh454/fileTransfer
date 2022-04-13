@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <sys/socket.h>
-#include "Practical.h"
+#include "Shared.h"
 
 void waitForGo(int sock) {
     char *goString = "7cea75aef83f0f84a180fc134ce85700d25f6c52bdcfa860481d4bd5824d2d19";

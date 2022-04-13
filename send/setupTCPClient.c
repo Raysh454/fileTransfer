@@ -6,7 +6,8 @@
 #include <netdb.h>
 #include <unistd.h>
 #include <sys/socket.h>
-#include "Practical.h"
+#include "Send.h"
+#include "../shared/Shared.h"
 
 int setupTCPClient(char *address, char *service) {
    

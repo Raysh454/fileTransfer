@@ -6,7 +6,8 @@
 #include <netdb.h>
 #include <unistd.h>
 #include <sys/socket.h>
-#include "Practical.h"
+#include "Receive.h"
+#include "../shared/Shared.h"
 
 static const int MAX_PENDING = 5;
 

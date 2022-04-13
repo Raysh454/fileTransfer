@@ -3,21 +3,22 @@
 #include <string.h>
 #include <sys/socket.h>
 #include <unistd.h>
-#include "Practical.h"
+#include "Send.h"
+#include "../shared/Shared.h"
 
 ssize_t sendFileData(int sock, char *data, size_t size);
 long sendFile(int sock, long fSize, char *fName, FILE *fp);
 long fileSize(FILE *fp);
 
-int main(int argc, char *argv[]) {
+int cloudSend(int argc, char *argv[]) {
 
     if(argc < 4)
         DieWithUserMessage("Parameters: ", "<host> <service> <file>");
 
-    char *addrString = argv[1];
-    char *portString = argv[2];
+    char *addrString = argv[2];
+    char *portString = argv[3];
 
-    for(int i = 3; i < argc; ++i) {
+    for(int i = 4; i < argc; ++i) {
         char *filePath = argv[i];
         char *fileName = strrchr(filePath, '/');
         if(fileName == 0)
@@ -67,7 +68,7 @@ long sendFile(int sock, long fSize, char *fName, FILE *fp) {
     while((bytesRead = fread(buffer, 1, BUFSIZ, fp)) > 0) {
         bytesWritten = sendFileData(sock, buffer, bytesRead);
         totalBytes += bytesWritten;
-        printFileStatus(fName, fSize, totalBytes);        
+        printSFileStatus(fName, fSize, totalBytes);        
     }
     putchar('\n');
     return totalBytes;
