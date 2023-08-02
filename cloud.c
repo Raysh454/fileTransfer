@@ -6,7 +6,7 @@
 #include "send/Send.h"
 
 int main(int argc, char *argv[]) {
-    if(argc < 3)
+    if(argc < 2)
         DieWithUserMessage("cloud", "send/recv");
     
     if(!strcmp(argv[1], "send"))
